@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <style>
+            table {
+                font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+                font-size: 14px;
+                border-radius: 10px;
+                border-spacing: 0;
+                text-align: center;
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            th {
+                background: #4caf50;
+                color: rgb(255, 255, 255);
+                text-shadow: 0 1px 1px #2D2020;
+                padding: 10px 20px;
+            }
+            th, td {
+                border-style: solid;
+                border-width: 0 1px 1px 0;
+                border-color: white;
+            }
+            th:first-child, td:first-child {
+                text-align: left;
+            }
+            th:first-child {
+                border-top-left-radius: 10px;
+            }
+            th:last-child {
+                border-top-right-radius: 10px;
+                border-right: none;
+            }
+            td {
+                padding: 10px 20px;
+                background: #F8E391;
+            }
+            tr:last-child td:first-child {
+                border-radius: 0 0 0 10px;
+            }
+            tr:last-child td:last-child {
+                border-radius: 0 0 10px 0;
+            }
+            tr td:last-child {
+                border-right: none;
+            }
+            .figurestyle {
+              padding-left:5px; 
+              padding-right:5px;  
+              margin-left:0px; 
+              margin-right:0px;
+            }
+
+            .parentFigureStyle {
+                text-align: center;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+        </style>
+</head>
+
+<body>
+    <h1 style="color:green;">Image Super Resolution</h1>
+    <div class="w3-container w3-padding">
+        <div class="w3-card-4">
+            <form method="post" class="w3-selection w3-light-grey w3-padding" action="" enctype=multipart/form-data>
+                <label>Исходное изображение:
+                    <input type="file" name="file" id="imageUpload" accept="image/*">
+                    <img id="preview" src="#" alt="Image Preview" style="display:none;height:330px;" />
+                    <script>
+                        document.getElementById('imageUpload').addEventListener('change', function () {
+                            let file = this.files[0];
+                            let reader = new FileReader();
+                
+                            reader.onload = function (event) {
+                                let base64String = event.target.result;
+                                document.getElementById('preview').src = base64String;
+                                document.getElementById('preview').style.display = 'block';
+                                console.log(base64String);
+                            };
+                
+                            reader.readAsDataURL(file);
+                        });
+                    </script>
+                </label>
+                {% if file != None %}
+                  {{file}}
+                  <button name="sr_button" type="submit" class="w3-btn w3-green w3-round-large w3-margin-bottom">Запуск</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div class="w3-container w3-padding">
+        {% if sr_image != None %}
+            <label>Результат:</label>
+
+            <div class="parentFigureStyle">
+              <figure class="figurestyle">
+                {{scaled_image|safe}}
+                <figcaption style="text-align:center; padding-top:5px;">Исходное изображение</figcaption>
+              </figure>
+              <figure class="figurestyle">
+                {{sr_image|safe}}
+                <figcaption style="text-align:center; padding-top:5px;">Разрешение x4</figcaption>
+              </figure>
+            </div>
+
+            <div class="w3-container w3-padding" style="overflow-y:auto;">
+                <form name="download_image" method="post" class="w3-selection w3-light-grey w3-padding" action="" enctype=multipart/form-data></form>
+                    <button type="submit" name="download_button" class="w3-btn w3-green w3-round-large w3-margin-bottom"><a href="/download_image">Скачать</a></button>
+                </form>
+            </div>
+
+            <label>Время: {{message}}сек.</label>
+        {% endif %}
+    </div>
+    <div class="w3-container w3-grey w3-opacity w3-right-align w3-padding">
+        Александр Садаков, Олег Смирнов (М8О-207М-23)
+    </div>
+</body>
+
+</html>
